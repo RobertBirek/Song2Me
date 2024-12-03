@@ -98,7 +98,7 @@ def list_separated():
         st.write(":notes: pozostałe")
         st.audio(str(other_path), format="audio/mp3")
     
-    if st.button("Separuj ścieżki",use_container_width=True):
+    if st.button("Separuj ścieżki",use_container_width=True, key="s2"):
         separate_mp3()
     
     return ok
@@ -116,18 +116,18 @@ def show_page():
             st.write("Utwór został wczytany")
             st.audio(st.session_state.uploaded_mp3, format="audio/mp3") 
 
-            # if not list_separated():
-            #     if st.button("Separuj ścieżki",use_container_width=True):
-            #         separate_mp3()
+            if not list_separated():
+                if st.button("Separuj ścieżki",use_container_width=True, key="s1"):
+                    separate_mp3()
         else:
             st.error(f"Brak pliku: {path_mp3}")
-            if st.button("Wczytaj nowy",use_container_width=True):
+            if st.button("Wczytaj nowy",use_container_width=True, key="n1"):
                 st.session_state.uploaded_mp3 = None
                 st.session_state.current_menu = "page_addnew"
                 st.rerun()
     else:
         st.error(f"Brak pliku: {path_mp3}")
-        if st.button("Wczytaj nowy",use_container_width=True):
+        if st.button("Wczytaj nowy",use_container_width=True, key="n2"):
             st.session_state.uploaded_mp3 = None
             st.session_state.current_menu = "page_addnew"
             st.rerun()
