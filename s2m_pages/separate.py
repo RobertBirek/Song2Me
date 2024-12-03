@@ -18,8 +18,8 @@ def separate_mp3():
     with st.spinner("Separuje ścieżki. Chwilę to potrwa. Możesz posłuchać utworu."):
         result = subprocess.run(
             # ["demucs", "-n", "htdemucs", new_mp3_dir, "--out", str(PATH_SEPARATE), "--mp3"],
-            # ["demucs", "-n", "htdemucs_6s", new_mp3_dir, "--out", str(PATH_SEPARATE), "--filename", "{stem}.{ext}", "--mp3", "--mp3-bitrate", "128", "--mp3-preset", "7"],   #htdemucs_6s
-            ["demucs", "-n", "htdemucs", new_mp3_dir, "--out", str(PATH_SEPARATE), "--filename", "{stem}.{ext}", "--mp3", "--mp3-bitrate", "128", "--mp3-preset", "7"],   #htdemucs_6s
+            ["demucs", "-n", "htdemucs_6s", new_mp3_dir, "--out", str(PATH_SEPARATE), "--filename", "{stem}.{ext}", "--mp3", "--mp3-bitrate", "128", "--mp3-preset", "7"],   #htdemucs_6s
+            # ["demucs", "-n", "htdemucs", new_mp3_dir, "--out", str(PATH_SEPARATE), "--filename", "{stem}.{ext}", "--mp3", "--mp3-bitrate", "128", "--mp3-preset", "7"],   #htdemucs_6s
             capture_output=True,
             text=True
         )
