@@ -116,9 +116,9 @@ def show_page():
             st.write("Utwór został wczytany")
             st.audio(st.session_state.uploaded_mp3, format="audio/mp3") 
 
-            if not list_separated():
-                if st.button("Separuj ścieżki",use_container_width=True):
-                    separate_mp3()
+            # if not list_separated():
+            #     if st.button("Separuj ścieżki",use_container_width=True):
+            #         separate_mp3()
         else:
             st.error(f"Brak pliku: {path_mp3}")
             if st.button("Wczytaj nowy",use_container_width=True):
