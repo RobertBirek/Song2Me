@@ -1,0 +1,9 @@
+streamlit
+torch
+torchvision
+torchaudio
+demucs
+pydub
+openai
+python-dotenv
+qdrant-client

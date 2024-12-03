@@ -1,0 +1,101 @@
+v3.1
+problem z path plikami, dla wielu użytkowników w internecie
+dodanie użytkowników i logowanie
+odzielne pliki dla każdego użytkownika
+dodanie 2 ścieżek do separacji, guitar i piano
+
+ song2me/
+│
+├── app.py                                  # Główny plik aplikacji
+├── s2m_pages/                              # Folder ze stronami
+│   ├── menu.py                             # strona menu
+│   ├── main.py                             # strona główna
+│   ├── find.py                             # strona wyszukiwania
+│   ├── login.py                            # strona logowanie użytkowników
+│   ├── addnew.py                           # strona wczytywania nowego mp3
+│   ├── separate.py                         # strona separacji ścieżek
+│   ├── mix.py                              # strona mikser
+│   └── info.py                             # strona informacyjna o programie
+└── users/                                  # Folder użytkowników
+    ├── user/                               # Folder użytkownika
+    │   ├── songs/                          # Folder utworów
+    │   │   ├── new/                        # Folder utworów
+                ├── new.mp3                 # plik wczytanego utworu
+                ├── htdemucs_6s/            # Folder separacji pliku mp3
+                    ├── bass.mp3            # ścieżka basu
+                    ├── drums.mp3           # ścieżka perkusji
+                    ├── vocal.mp3           # ścieżka wokalu
+                    ├── guitar.mp3          # ścieżka gitar
+                    ├── piano.mp3           # ścieżka piano
+                    └── other.mp3           # ścieżka pozostałe
+                    
+
+v3
+dodanie separacji ścieżek
+
+ song2me/
+│
+├── app.py             # Główny plik aplikacji
+├── s2m_pages/         # Folder ze stronami
+│   ├── menu.py        # strona menu
+│   ├── find.py        # strona wyszukiwania
+│   ├── addnew.py      # strona wczytywania nowego mp3
+│   ├── separate.py    # strona separacji ścieżek
+│   ├── mix.py         # strona mikser
+│   └── info.py        # strona informacyjna o programie
+├── upload/            # Folder na nowy plik mp3
+│   └── example.mp3    # Przykładowe dane
+└── output/            # Folder separacji pliku mp3
+    ├── bass.mp3       # ścieżka basu
+    ├── drums.mp3      # ścieżka perkusji
+    ├── vocal.mp3      # ścieżka wokalu
+    └── other.mp3      # ścieżka pozostałe
+
+
+v2
+poprawa struktury plików
+wczytujemy plik .mp3 z utworem i zapisujemy go na dysku
+
+ song2me/
+│
+├── app.py             # Główny plik aplikacji
+├── s2m_pages/         # Folder ze stronami
+│   ├── menu.py        # strona menu
+│   ├── find.py        # strona wyszukiwania
+│   ├── addnew.py      # strona wczytywania nowego mp3
+│   ├── separate.py    # strona separacji ścieżek
+│   ├── mix.py         # strona mikser
+│   └── info.py        # strona informacyjna o programie
+└── upload/            # Folder na nowy plik mp3
+    └── example.mp3    # Przykładowe dane
+
+
+v1
+stworzenie menu
+
+ song2me/
+│
+└── app.py             # Główny plik aplikacji
+
+opis
+
+Program wczytujący utwór w formacie mp3
+conda create -n song2me python=3.8
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+conda install -y streamlit conda-forge::ffmpeg
+conda install -y pydub
+pip install demucs
+
+
+ song2me/
+│
+├── app.py             # Główny plik aplikacji
+├── menu.py            # Moduł z logiką menu
+├── s2m_pages/         # Folder ze stronami
+│   ├── styles.css     # Styl CSS
+│   └── logo.png       # Logo lub inne zasoby
+├── utils/             # Folder na pomocnicze moduły i funkcje
+│   └── helpers.py     # Funkcje pomocnicze
+├── data/              # Folder na dane (opcjonalnie)
+│   └── example.csv    # Przykładowe dane
+└── requirements.txt   # Plik z wymaganiami (biblioteki)
