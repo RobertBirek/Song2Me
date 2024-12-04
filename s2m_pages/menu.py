@@ -31,7 +31,7 @@ def show_menu():
         # else:
         if st.button("Separacja ścieżek",use_container_width=True, disabled=st.session_state.get("uploaded_mp3") is None):
             st.session_state.current_menu = "page_sep"
-        if st.button("Song Info",use_container_width=True):
+        if st.button("Song Info",use_container_width=True, disabled=st.session_state.get("uploaded_mp3") is None):
             st.session_state.current_menu = "page_info"
         if st.button("Miksowanie audio",use_container_width=True, disabled=st.session_state.get("uploaded_mp3") is None):
             st.session_state.current_menu = "page_mix"       
