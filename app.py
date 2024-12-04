@@ -3,11 +3,12 @@ from pathlib import Path
 import subprocess
 import numpy as np
 #from pydub import AudioSegment
-from s2m_pages import menu, main, info, find, addnew, separate, mix, login
+from s2m_pages import menu, main, info, find, addnew, separate, mix, login, about, changelog
 
 ######################################################
 
 st.set_page_config(page_title="Song2me",page_icon=":notes:")
+
 
 ######################################################
 def load_mp3(user):
@@ -37,7 +38,9 @@ def load_mp3(user):
         st.session_state.other_path = str(other_path)
 
 ######################################################
-# Inicjalizacja session_state, jeśli nie istnieje
+
+
+
 if "current_menu" not in st.session_state:
     st.session_state.current_menu = None
 if "uploaded_mp3" not in st.session_state:
@@ -54,6 +57,13 @@ if "username" not in st.session_state:
     st.session_state.username = None
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
+######################################################
+if "current_menu" not in st.query_params:
+    st.query_params.current_menu = None
+
+if st.query_params.current_menu == "page_log":
+    st.session_state.current_menu = "page_log"
+st.query_params.clear()
 ######################################################
 
 if (st.session_state.username is not None) and (st.session_state.logged_in == True):
@@ -84,4 +94,10 @@ else:
     #############################################################    
     elif st.session_state.current_menu == "page_info":
         info.show_page()
+    #############################################################    
+    elif st.session_state.current_menu == "page_about":
+        about.show_page()
+    #############################################################
+    elif st.session_state.current_menu == "page_log":
+        changelog.show_page()
     #############################################################
