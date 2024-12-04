@@ -12,6 +12,8 @@ st.set_page_config(page_title="Song2me",page_icon=":notes:")
 
 ######################################################
 def load_mp3(user):
+    st.session_state.new == False
+    
     PATH_UPLOAD = Path("users") / user / "songs" / "new" / "new.mp3"
     PATH_SEPARATE = Path("users") / user / "songs" / "new" / "htdemucs_6s"
     vocal_path = PATH_SEPARATE / "vocals.mp3"
@@ -39,7 +41,8 @@ def load_mp3(user):
 
 ######################################################
 
-
+if "new" not in st.session_state:
+    st.session_state.new = False
 
 if "current_menu" not in st.session_state:
     st.session_state.current_menu = None
@@ -66,7 +69,7 @@ if st.query_params.current_menu == "page_log":
 st.query_params.clear()
 ######################################################
 
-if (st.session_state.username is not None) and (st.session_state.logged_in == True):
+if (st.session_state.username is not None) and (st.session_state.logged_in == True) and (st.session_state.new == False):
     load_mp3(st.session_state.username)  # jeżeli jest niedokończona piosenka
 
 # Logowanie

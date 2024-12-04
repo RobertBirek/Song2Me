@@ -43,19 +43,7 @@ def separate_mp3():
 
         # Odtwarzanie wyników
         list_separated()
-        # st.write(":microphone: wokal")
-        # st.audio(str(vocal_path), format="audio/mp3")
-        # st.write(":long_drum: perkusja")
-        # st.audio(str(drums_path), format="audio/mp3")
-        # st.write(":violin: bass")
-        # st.audio(str(bass_path), format="audio/mp3")
-        # st.write(":guitar: gitara")
-        # st.audio(str(guitar_path), format="audio/mp3")
-        # st.write(":musical_keyboard: piano")
-        # st.audio(str(piano_path), format="audio/mp3")
-        # st.write(":notes: pozostałe")
-        # st.audio(str(other_path), format="audio/mp3")   
-    
+
     else:
         st.error("Wystąpił błąd podczas separacji.")
         st.text(result.stderr)
@@ -71,9 +59,9 @@ def list_separated():
     piano_path = PATH_SEPARATE / "piano.mp3"
     other_path = PATH_SEPARATE / "other.mp3"
 
-    st.header("Utwór został podzielony na ścieżki")
     ok = False
     if vocal_path.exists() and vocal_path.is_file():
+        st.header("Utwór został podzielony na ścieżki")
         ok = True
         st.write(":microphone: wokal")
         st.audio(str(vocal_path), format="audio/mp3")
@@ -145,9 +133,6 @@ def list_separated():
             file_name="other.mp3",
             mime="audio/mpeg"
         )
-    
-    # if st.button("Separuj ścieżki",use_container_width=True, key="s2"):
-    #     separate_mp3()
     
     return ok
 

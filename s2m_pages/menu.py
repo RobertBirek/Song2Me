@@ -15,6 +15,7 @@ def show_menu():
                 st.session_state.username = None
                 st.session_state.logged_in = False
                 st.session_state.current_menu = None
+                st.session_state.uploaded_mp3 = None
                 st.rerun()
 
         st.write("---")

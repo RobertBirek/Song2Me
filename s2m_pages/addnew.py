@@ -34,6 +34,7 @@ def show_page():
 
             if st.button("Wczytaj nowy",use_container_width=True):
                 st.session_state.uploaded_mp3 = None
+                st.session_state.new = True
                 st.session_state.current_menu = "page_addnew"
                 st.rerun()
             if st.button("Przejdź do separacji ścieżek",use_container_width=True):
@@ -43,5 +44,6 @@ def show_page():
             st.error(f"Brak pliku: {path_mp3}")
             if st.button("Wczytaj nowy",use_container_width=True):
                 st.session_state.uploaded_mp3 = None
+                st.session_state.new = True
                 st.session_state.current_menu = "page_addnew"
                 st.rerun()
