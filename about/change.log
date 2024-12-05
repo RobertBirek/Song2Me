@@ -1,3 +1,44 @@
+v3.3
+dodawanie plików z różnych formatów
+dodawanie plików z nagrań z mikrofonu
+usuwanie plików "cichych"
+
+v3.2
+poprawa błędów wczytywania nowych plików, gdy istniał plik na dysku
+wdrożenie codu na github https://github.com/RobertBirek/Song2Me
+i streamlit https://song2me.streamlit.app/
+dodanie plików wdrożeniowych
+zmiana w menu
+
+ song2me/
+│
+├── app.py                                  # Główny plik aplikacji
+├── s2m_pages/                              # Folder ze stronami
+│   ├── menu.py                             # strona menu
+│   ├── main.py                             # strona główna
+│   ├── find.py                             # strona wyszukiwania
+│   ├── login.py                            # strona logowanie użytkowników
+│   ├── addnew.py                           # strona wczytywania nowego mp3
+│   ├── separate.py                         # strona separacji ścieżek
+│   ├── mix.py                              # strona mikser
+│   ├── about.py                            # strona informacyjna o programie
+│   ├── changelog.py                        # strona informacyjna o zmianach w programie
+│   └── info.py                             # strona informacyjna o utworze
+└── users/                                  # Folder użytkowników
+    ├── user/                               # Folder użytkownika
+    │   ├── songs/                          # Folder utworów
+    │   │   ├── new/                        # Folder utworów
+                ├── new.mp3                 # plik wczytanego utworu
+                ├── htdemucs_6s/            # Folder separacji pliku mp3
+                    ├── bass.mp3            # ścieżka basu
+                    ├── drums.mp3           # ścieżka perkusji
+                    ├── vocal.mp3           # ścieżka wokalu
+                    ├── guitar.mp3          # ścieżka gitar
+                    ├── piano.mp3           # ścieżka piano
+                    └── other.mp3           # ścieżka pozostałe
+                    
+
+
 v3.1
 problem z path plikami, dla wielu użytkowników w internecie
 dodanie użytkowników i logowanie
@@ -85,6 +126,7 @@ pip install torch torchvision torchaudio --index-url https://download.pytorch.or
 conda install -y streamlit conda-forge::ffmpeg
 conda install -y pydub
 pip install demucs
+pip install streamlit-audiorecorder
 
 
  song2me/

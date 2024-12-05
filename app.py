@@ -1,19 +1,18 @@
 import streamlit as st
+from audiorecorder import audiorecorder
 from pathlib import Path
+import shutil
 import subprocess
 import numpy as np
 #from pydub import AudioSegment
-from s2m_pages import menu, main, info, find, addnew, separate, mix, login, about, changelog
+from s2m_pages import menu, main, info, find, addnew, separate, mix, login, about
 
 ######################################################
 
 st.set_page_config(page_title="Song2me",page_icon=":notes:")
 
-
 ######################################################
 def load_mp3(user):
-    st.session_state.new == False
-    
     PATH_UPLOAD = Path("users") / user / "songs" / "new" / "new.mp3"
     PATH_SEPARATE = Path("users") / user / "songs" / "new" / "htdemucs_6s"
     vocal_path = PATH_SEPARATE / "vocals.mp3"
@@ -39,6 +38,19 @@ def load_mp3(user):
     if other_path.exists() and other_path.is_file():
         st.session_state.other_path = str(other_path)
 
+##############################
+
+def delete_new_song(user):
+    del_path = Path("users") / user / "songs" / "new"
+    # Sprawdzenie, czy katalog istnieje
+    if del_path.exists() and del_path.is_dir():
+        shutil.rmtree(del_path)  # Usunięcie całego katalogu
+        print(f"Katalog {del_path} został usunięty.")
+        st.session_state.new = False
+    else:
+        print(f"Katalog {del_path} nie istnieje.")
+    
+
 ######################################################
 
 if "new" not in st.session_state:
@@ -61,15 +73,10 @@ if "username" not in st.session_state:
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 ######################################################
-if "current_menu" not in st.query_params:
-    st.query_params.current_menu = None
+if (st.session_state.new == True):
+    delete_new_song(st.session_state.username)
 
-if st.query_params.current_menu == "page_log":
-    st.session_state.current_menu = "page_log"
-st.query_params.clear()
-######################################################
-
-if (st.session_state.username is not None) and (st.session_state.logged_in == True) and (st.session_state.new == False):
+if (st.session_state.username is not None) and (st.session_state.logged_in == True):
     load_mp3(st.session_state.username)  # jeżeli jest niedokończona piosenka
 
 # Logowanie
@@ -100,7 +107,4 @@ else:
     #############################################################    
     elif st.session_state.current_menu == "page_about":
         about.show_page()
-    #############################################################
-    elif st.session_state.current_menu == "page_log":
-        changelog.show_page()
     #############################################################

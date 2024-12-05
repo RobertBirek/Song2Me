@@ -26,10 +26,7 @@ def show_menu():
             st.session_state.current_menu = "page_find"
         if st.button("Dodaj utwór",use_container_width=True):
             st.session_state.current_menu = "page_addnew"
-        # if st.session_state.uploaded_mp3 is None:
-        #     st.button("Separacja ścieżek",use_container_width=True, disabled=True)
-        #     st.button("Miksowanie audio",use_container_width=True, disabled=True)    
-        # else:
+ 
         if st.button("Separacja ścieżek",use_container_width=True, disabled=st.session_state.get("uploaded_mp3") is None):
             st.session_state.current_menu = "page_sep"
         if st.button("Song Info",use_container_width=True, disabled=st.session_state.get("uploaded_mp3") is None):
@@ -38,5 +35,3 @@ def show_menu():
             st.session_state.current_menu = "page_mix"       
         if st.button("O programie",use_container_width=True):
             st.session_state.current_menu = "page_about"
-        if st.button("changelog V3.1",use_container_width=True):
-            st.session_state.current_menu = "page_log"

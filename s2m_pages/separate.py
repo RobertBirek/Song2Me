@@ -61,7 +61,7 @@ def list_separated():
 
     ok = False
     if vocal_path.exists() and vocal_path.is_file():
-        st.header("Utwór został podzielony na ścieżki")
+        st.subheader("Utwór został podzielony na ścieżki")
         ok = True
         st.write(":microphone: wokal")
         st.audio(str(vocal_path), format="audio/mp3")
@@ -146,7 +146,7 @@ def show_page():
 
     if st.session_state.uploaded_mp3 is not None:
         if (path_mp3.exists()) and (path_mp3.is_file()):
-            st.write("Utwór został wczytany")
+            st.subheader("Utwór został wczytany")
             st.audio(st.session_state.uploaded_mp3, format="audio/mp3") 
 
             # list_separated()
@@ -165,13 +165,3 @@ def show_page():
             st.session_state.uploaded_mp3 = None
             st.session_state.current_menu = "page_addnew"
             st.rerun()
-        # if st.session_state.vocals_path is not None:
-        #     # Odtwarzanie wyników
-        #     st.write("wokal")
-        #     st.audio(str(st.session_state.vocals_path), format="audio/mp3")
-        #     st.write("perkusja")
-        #     st.audio(str(st.session_state.drums_path), format="audio/mp3")
-        #     st.write("bass")
-        #     st.audio(str(st.session_state.bass_path), format="audio/mp3")
-        #     st.write("pozostałe")
-        #     st.audio(str(st.session_state.other_path), format="audio/mp3")
