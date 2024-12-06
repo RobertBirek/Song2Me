@@ -4,6 +4,7 @@ import streamlit as st
 from audiorecorder import audiorecorder
 from pydub import AudioSegment
 from yt_dlp import YoutubeDL
+import youtube_dl
 from pathlib import Path
 from io import BytesIO
 
@@ -82,7 +83,7 @@ def show_page():
                                 {
                                     "key": "FFmpegExtractAudio",
                                     "preferredcodec": "mp3",
-                                    "preferredquality": "192",
+                                    "preferredquality": "128",
                                 }
                             ],
                             "geo_bypass": True, # Pomijanie ograniczeń regionalnych
@@ -108,7 +109,8 @@ def show_page():
                     st.success("Plik został zapisany jako 'new.mp3'.")
 
                 except Exception as e:
-                    st.error(f"Wystąpił błąd: {e}")
+                    st.write("")
+                    #st.error(f"Wystąpił błąd: {e}")
 
         if (path_mp3.exists()) and (path_mp3.is_file()): #uploaded_file or rec_audio or youtube_url:
             st.audio(str(path_mp3))
