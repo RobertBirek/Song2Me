@@ -5,6 +5,7 @@ torchvision
 torchaudio
 demucs
 pydub
+yt-dlp
 openai
 python-dotenv
 qdrant-client

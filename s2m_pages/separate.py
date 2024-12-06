@@ -67,72 +67,72 @@ def list_separated():
         st.audio(str(vocal_path), format="audio/mp3")
         with open(str(vocal_path), "rb") as file:
             file_data = file.read()
-        st.download_button(
-            label="Pobierz wokal MP3",
-            data=file_data,
-            file_name="vocals.mp3",
-            mime="audio/mpeg"
-        )
+            st.download_button(
+                label="Pobierz wokal MP3",
+                data=file_data,
+                file_name="vocals.mp3",
+                mime="audio/mpeg"
+            )
     if drums_path.exists() and drums_path.is_file():
         ok = True
         st.write(":long_drum: perkusja")
         st.audio(str(drums_path), format="audio/mp3")
         with open(str(drums_path), "rb") as file:
             file_data = file.read()
-        st.download_button(
-            label="Pobierz perkusje MP3",
-            data=file_data,
-            file_name="drums.mp3",
-            mime="audio/mpeg"
-        )
+            st.download_button(
+                label="Pobierz perkusje MP3",
+                data=file_data,
+                file_name="drums.mp3",
+                mime="audio/mpeg"
+            )
     if bass_path.exists() and bass_path.is_file():
         ok = True
         st.write(":violin: bass")
         st.audio(str(bass_path), format="audio/mp3")
         with open(str(bass_path), "rb") as file:
             file_data = file.read()
-        st.download_button(
-            label="Pobierz bass MP3",
-            data=file_data,
-            file_name="bass.mp3",
-            mime="audio/mpeg"
-        )
+            st.download_button(
+                label="Pobierz bass MP3",
+                data=file_data,
+                file_name="bass.mp3",
+                mime="audio/mpeg"
+            )
     if guitar_path.exists() and guitar_path.is_file():
         ok = True
         st.write(":guitar: gitara")
         st.audio(str(guitar_path), format="audio/mp3")
         with open(str(guitar_path), "rb") as file:
             file_data = file.read()
-        st.download_button(
-            label="Pobierz gitara MP3",
-            data=file_data,
-            file_name="guitar.mp3",
-            mime="audio/mpeg"
-        )
+            st.download_button(
+                label="Pobierz gitara MP3",
+                data=file_data,
+                file_name="guitar.mp3",
+                mime="audio/mpeg"
+            )
     if piano_path.exists() and piano_path.is_file():
         ok = True
         st.write(":musical_keyboard: piano")
         st.audio(str(piano_path), format="audio/mp3")
         with open(str(piano_path), "rb") as file:
             file_data = file.read()
-        st.download_button(
-            label="Pobierz piano MP3",
-            data=file_data,
-            file_name="piano.mp3",
-            mime="audio/mpeg"
-        )
+            st.download_button(
+                label="Pobierz piano MP3",
+                data=file_data,
+                file_name="piano.mp3",
+                mime="audio/mpeg"
+            )
     if other_path.exists() and other_path.is_file():
         ok = True
         st.write(":notes: pozostałe")
         st.audio(str(other_path), format="audio/mp3")
         with open(str(other_path), "rb") as file:
             file_data = file.read()
-        st.download_button(
-            label="Pobierz other MP3",
-            data=file_data,
-            file_name="other.mp3",
-            mime="audio/mpeg"
-        )
+            st.download_button(
+                label="Pobierz other MP3",
+                data=file_data,
+                file_name="other.mp3",
+                mime="audio/mpeg"
+            )
     
     return ok
 
@@ -147,7 +147,15 @@ def show_page():
     if st.session_state.uploaded_mp3 is not None:
         if (path_mp3.exists()) and (path_mp3.is_file()):
             st.subheader("Utwór został wczytany")
-            st.audio(st.session_state.uploaded_mp3, format="audio/mp3") 
+            st.audio(st.session_state.uploaded_mp3, format="audio/mp3")
+            with open(st.session_state.uploaded_mp3, "rb") as file:
+                file_data = file.read()
+                st.download_button(
+                    label="Pobierz MP3",
+                    data=file_data,
+                    file_name="new.mp3",
+                    mime="audio/mpeg"
+                )
 
             # list_separated()
             if not list_separated():

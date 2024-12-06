@@ -4,7 +4,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import numpy as np
-#from pydub import AudioSegment
+from pydub import AudioSegment
 from s2m_pages import menu, main, info, find, addnew, separate, mix, login, about
 
 ######################################################

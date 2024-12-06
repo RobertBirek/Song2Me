@@ -127,6 +127,7 @@ conda install -y streamlit conda-forge::ffmpeg
 conda install -y pydub
 pip install demucs
 pip install streamlit-audiorecorder
+pip install yt-dlp //pip install pytube
 
 
  song2me/

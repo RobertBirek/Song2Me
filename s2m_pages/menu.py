@@ -35,3 +35,5 @@ def show_menu():
             st.session_state.current_menu = "page_mix"       
         if st.button("O programie",use_container_width=True):
             st.session_state.current_menu = "page_about"
+
+        st.write("V3.2")

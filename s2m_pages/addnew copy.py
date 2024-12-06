@@ -4,7 +4,6 @@ import streamlit as st
 from audiorecorder import audiorecorder
 from pydub import AudioSegment
 from pytube import YouTube
-from yt_dlp import YoutubeDL
 from pathlib import Path
 from io import BytesIO
 
@@ -73,24 +72,15 @@ def show_page():
                 try:
                     # Pobieranie wideo z YouTube
                     with st.spinner("Pobieranie wideo z YouTube..."):
-                        ydl_opts = {
-                            "format": "bestaudio/best",
-                            "outtmpl": str(path_mp3), #"downloaded_audio.mp3",
-                            "postprocessors": [
-                                {
-                                    "key": "FFmpegExtractAudio",
-                                    "preferredcodec": "mp3",
-                                    "preferredquality": "192",
-                                }
-                            ],
-                        }
-                        with YoutubeDL(ydl_opts) as ydl:
-                            ydl.download([youtube_url])
+                        yt = YouTube(youtube_url)
+                        stream = yt.streams.filter(only_audio=True).first()  # Pobranie tylko audio
+                        audio_file = stream.download()  # Pobranie pliku audio do lokalnego katalogu
+
                     # st.success(f"Pobrano plik: {audio_file}")
 
                     # Konwersja audio na MP3
                     with st.spinner("Konwertowanie pliku do formatu MP3..."):
-                        audio = AudioSegment.from_file(path_mp3)
+                        audio = AudioSegment.from_file(audio_file)
                         mp3_buffer = BytesIO()
                         audio.export(mp3_buffer, format="mp3", bitrate="128k")  # Konwersja do MP3 z bitrate 320 kbps
 
