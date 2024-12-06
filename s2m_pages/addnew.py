@@ -73,23 +73,23 @@ def show_page():
                     # Pobieranie wideo z YouTube
                     with st.spinner("Pobieranie wideo z YouTube..."):
                         ydl_opts = {
-                            "format": "bestaudio/best",
-                            "outtmpl": str(path_mp3), #"downloaded_audio.mp3",
-                            "verbose": True,
-                            "noprogress": True,
-                            "force_generic_extractor": True,
-                            "postprocessors": [
-                                {
-                                    "key": "FFmpegExtractAudio",
-                                    "preferredcodec": "mp3",
-                                    "preferredquality": "128",
-                                }
-                            ],
-                            "geo_bypass": True, # Pomijanie ograniczeń regionalnych
-                            "headers": {
-                                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-                                "Accept-Language": "en-US,en;q=0.9",
-                            },
+                            "format": "bestaudio",
+                            # "verbose": True,
+                            # "noprogress": True,
+                            # "force_generic_extractor": True,
+                            # "postprocessors": [
+                            #     {
+                            #         "key": "FFmpegExtractAudio",
+                            #         "preferredcodec": "mp3",
+                            #         "preferredquality": "128",
+                            #     }
+                            # ],
+                            # "geo_bypass": True, # Pomijanie ograniczeń regionalnych
+                            # "headers": {
+                            #     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+                            #     "Accept-Language": "en-US,en;q=0.9",
+                            # },
+                            "outtmpl": str(path_mp3),
 
                         }
                         with YoutubeDL(ydl_opts) as ydl:
@@ -108,8 +108,8 @@ def show_page():
                     st.success("Plik został zapisany jako 'new.mp3'.")
 
                 except Exception as e:
-                    st.write("")
-                    #st.error(f"Wystąpił błąd: {e}")
+                    # st.write("")
+                    st.error(f"Wystąpił błąd: {e}")
 
         if (path_mp3.exists()) and (path_mp3.is_file()): #uploaded_file or rec_audio or youtube_url:
             st.audio(str(path_mp3))
