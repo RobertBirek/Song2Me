@@ -75,6 +75,9 @@ def show_page():
                         ydl_opts = {
                             "format": "bestaudio/best",
                             "outtmpl": str(path_mp3), #"downloaded_audio.mp3",
+                            "verbose": True,
+                            "noprogress": True,
+                            "force_generic_extractor": True,
                             "postprocessors": [
                                 {
                                     "key": "FFmpegExtractAudio",
