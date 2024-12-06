@@ -4,7 +4,6 @@ import streamlit as st
 from audiorecorder import audiorecorder
 from pydub import AudioSegment
 from yt_dlp import YoutubeDL
-import youtube_dl
 from pathlib import Path
 from io import BytesIO
 
