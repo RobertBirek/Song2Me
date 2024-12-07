@@ -7,14 +7,17 @@ from pydub import AudioSegment
 from yt_dlp import YoutubeDL
 from pathlib import Path
 from io import BytesIO
-from webshare import ApiClient
+#from webshareproxy import ApiClient
 import requests
 
 env = dotenv_values(".env")
 
-if 'WEBSHAREPROXY' in st.secrets:
-    env['WEBSHAREPROXY'] = st.secrets['WEBSHAREPROXY']
-
+if 'WEBSHARE_KEY' in st.secrets:
+    env['WEBSHARE_KEY'] = st.secrets['WEBSHARE_KEY']
+if 'WEBSHARE_USER' in st.secrets:
+    env['WEBSHARE_USER'] = st.secrets['WEBSHARE_USER']
+if 'WEBSHARE_PASS' in st.secrets:
+    env['WEBSHARE_PASS'] = st.secrets['WEBSHARE_PASS']
 # Ścieżka do wyników
 
 def show_page():
@@ -79,13 +82,16 @@ def show_page():
             if youtube_url:
                 try:
                     # Wprowadź swój klucz API
-                    api_key = env['WEBSHAREPROXY']
-                    api_client = ApiClient(api_key)
-                    proxies = api_client.get_proxy_list()
-                    selected_proxy = proxies.get_results[0]
-                    proxy_url = f"http://{selected_proxy.username}:{selected_proxy.password}@{selected_proxy.proxy_address}:{selected_proxy.port}"
-
+                    api_key = env['WEBSHARE_KEY']
+                    username = env['WEBSHARE_USER']
+                    password = env['WEBSHARE_PASS']
+                    # api_client = ApiClient(api_key)
+                    # proxies = api_client.get_proxy_list()
+                    # selected_proxy = proxies.get_results[0]
+                    # proxy_url = f"http://{selected_proxy.username}:{selected_proxy.password}@{selected_proxy.proxy_address}:{selected_proxy.port}"
+                    proxy_url = f"http://{username}:{password}@198.23.239.134:6540"
                     # Pobieranie wideo z YouTube
+                    st.write(proxy_url)
                     with st.spinner("Pobieranie wideo z YouTube..."):
                         ydl_opts = {
                             "format": "bestaudio",
@@ -100,10 +106,10 @@ def show_page():
                             #     }
                             # ],
                             "geo_bypass": True, # Pomijanie ograniczeń regionalnych
-                            # "headers": {
-                            #     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-                            #     "Accept-Language": "en-US,en;q=0.9",
-                            # },
+                            "headers": {
+                                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+                                "Accept-Language": "en-US,en;q=0.9",
+                            },
                             "proxy": proxy_url, #"http://mfrfapbm:hwfbps6d7o4r@198.23.239.134:6540",
                             # "proxy": "socks4://217.145.199.47:56746",
                             "outtmpl": str(path_mp3),

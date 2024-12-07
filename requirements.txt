@@ -8,7 +8,5 @@ pydub
 yt-dlp
 ffmpeg
 openai
-webshareproxy
-webshare
 python-dotenv
 qdrant-client
