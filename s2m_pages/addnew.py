@@ -151,8 +151,8 @@ def show_page():
                     with st.spinner("Pobieranie wideo z YouTube..."):
                         ydl_opts = {
                             "format": "bestaudio",
-                            # "cookies": "cookies.txt",
-                            "cookies": "merged_cookies.txt",
+                            "cookies": "cookies.txt",
+                            # "cookies": "merged_cookies.txt",
                             # "cookiesfrombrowser": ('chrome',),
                             # "verbose": True,
                             # "noprogress": True,
