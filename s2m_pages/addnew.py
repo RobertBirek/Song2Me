@@ -2,10 +2,18 @@
 
 import streamlit as st
 from audiorecorder import audiorecorder
+from dotenv import dotenv_values
 from pydub import AudioSegment
 from yt_dlp import YoutubeDL
 from pathlib import Path
 from io import BytesIO
+from webshareproxy import ApiClient
+import requests
+
+env = dotenv_values(".env")
+
+if 'WEBSHAREPROXY' in st.secrets:
+    env['WEBSHAREPROXY'] = st.secrets['WEBSHAREPROXY']
 
 # Ścieżka do wyników
 
@@ -70,6 +78,13 @@ def show_page():
 
             if youtube_url:
                 try:
+                    # Wprowadź swój klucz API
+                    api_key = env['WEBSHAREPROXY']
+                    api_client = ApiClient(api_key)
+                    proxies = api_client.get_proxy_list()
+                    selected_proxy = proxies.get_results[0]
+                    proxy_url = f"http://{selected_proxy.username}:{selected_proxy.password}@{selected_proxy.proxy_address}:{selected_proxy.port}"
+
                     # Pobieranie wideo z YouTube
                     with st.spinner("Pobieranie wideo z YouTube..."):
                         ydl_opts = {
@@ -89,7 +104,7 @@ def show_page():
                             #     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
                             #     "Accept-Language": "en-US,en;q=0.9",
                             # },
-                            "proxy": "http://mfrfapbm:hwfbps6d7o4r@198.23.239.134:6540",
+                            "proxy": proxy_url, #"http://mfrfapbm:hwfbps6d7o4r@198.23.239.134:6540",
                             # "proxy": "socks4://217.145.199.47:56746",
                             "outtmpl": str(path_mp3),
 
