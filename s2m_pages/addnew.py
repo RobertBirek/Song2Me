@@ -89,7 +89,8 @@ def show_page():
                             #     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
                             #     "Accept-Language": "en-US,en;q=0.9",
                             # },
-                            "proxy": "socks4://217.145.199.47:56746",
+                            "proxy": "http://mfrfapbm:hwfbps6d7o4r@198.23.239.134:6540",
+                            # "proxy": "socks4://217.145.199.47:56746",
                             "outtmpl": str(path_mp3),
 
                         }
