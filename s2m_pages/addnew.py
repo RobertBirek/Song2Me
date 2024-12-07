@@ -145,7 +145,7 @@ def show_page():
                     # selected_proxy = proxies.get_results[0]
                     # proxy_url = f"http://{selected_proxy.username}:{selected_proxy.password}@{selected_proxy.proxy_address}:{selected_proxy.port}"
                     
-                    proxy_url = f"http://{username}:{password}@107.172.163.27:6543"
+                    proxy_url = f"http://{username}:{password}@173.211.0.148:6641"
                     # Pobieranie wideo z YouTube
                     # st.write(proxy_url)
                     with st.spinner("Pobieranie wideo z YouTube..."):
