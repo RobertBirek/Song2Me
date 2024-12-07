@@ -4,8 +4,16 @@ import streamlit as st
 from pathlib import Path
 import subprocess
 import numpy as np
-#from pydub import AudioSegment
+from pydub import AudioSegment
 
+######################################################################
+def is_quiet(file_path, threshold_db=-30):
+    audio = AudioSegment.from_file(file_path)
+    avg_dbfs = audio.dBFS  # Obliczanie średniego poziomu głośności w dBFS
+
+    print(f"Średnia głośność pliku: {avg_dbfs:.2f} dBFS")
+    return avg_dbfs < threshold_db
+######################################################################
 def separate_mp3():
     # Ścieżka do wyników
     PATH_SEPARATE = Path("users") / st.session_state.username / "songs" /"new"
@@ -85,6 +93,7 @@ def list_separated():
                 file_name="drums.mp3",
                 mime="audio/mpeg"
             )
+            st.write(is_quiet(str(drums_path)))
     if bass_path.exists() and bass_path.is_file():
         ok = True
         st.write(":violin: bass")
