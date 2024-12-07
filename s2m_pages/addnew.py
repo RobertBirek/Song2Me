@@ -7,7 +7,7 @@ from pydub import AudioSegment
 from yt_dlp import YoutubeDL
 from pathlib import Path
 from io import BytesIO
-#from webshareproxy import ApiClient
+import browser_cookie3
 import requests
 
 env = dotenv_values(".env")
@@ -19,7 +19,54 @@ if 'WEBSHARE_USER' in st.secrets:
 if 'WEBSHARE_PASS' in st.secrets:
     env['WEBSHARE_PASS'] = st.secrets['WEBSHARE_PASS']
 # Ścieżka do wyników
+#######################################
+def fetch_cookies(domain_name=None):
+    """
+    Pobiera cookies z Chrome, Firefox i Edge.
+    """
+    cookies = []
+    try:
+        cookies.extend(browser_cookie3.chrome(domain_name=domain_name))
+        print("Cookies z Chrome pobrane.")
+    except Exception as e:
+        print(f"Błąd pobierania cookies z Chrome: {e}")
 
+    try:
+        cookies.extend(browser_cookie3.firefox(domain_name=domain_name))
+        print("Cookies z Firefox pobrane.")
+    except Exception as e:
+        print(f"Błąd pobierania cookies z Firefox: {e}")
+
+    try:
+        cookies.extend(browser_cookie3.edge(domain_name=domain_name))
+        print("Cookies z Edge pobrane.")
+    except Exception as e:
+        print(f"Błąd pobierania cookies z Edge: {e}")
+
+    return cookies
+
+def save_cookies_to_file(cookies, file_name):
+    """
+    Zapisuje cookies w formacie Netscape do pliku.
+    """
+    try:
+        with open(file_name, "w") as file:
+            file.write("# Netscape HTTP Cookie File\n")
+            for cookie in cookies:
+                file.write(
+                    f"{cookie.domain}\t"
+                    f"{str(cookie.secure).upper()}\t"
+                    f"{cookie.path}\t"
+                    f"{str(cookie.httpOnly).upper()}\t"
+                    f"{cookie.expires}\t"
+                    f"{cookie.name}\t"
+                    f"{cookie.value}\n"
+                )
+        print(f"Cookies zapisane do pliku {file_name}")
+    except Exception as e:
+        print(f"Błąd zapisywania cookies do pliku: {e}")
+
+###########################################################
 def show_page():
 
     PATH_UPLOAD = Path("users") / st.session_state.username / "songs" / "new"
@@ -81,6 +128,14 @@ def show_page():
 
             if youtube_url:
                 try:
+                    domain = "youtube.com"  # Możesz zmienić domenę, np. na "example.com"
+                    cookies = fetch_cookies(domain_name=domain)
+                    
+                    # Usunięcie duplikatów na podstawie nazwy ciasteczka i domeny
+                    unique_cookies = {f"{cookie.domain}:{cookie.name}": cookie for cookie in cookies}.values()
+                    
+                    save_cookies_to_file(unique_cookies, "merged_cookies.txt")
+                    
                     # Wprowadź swój klucz API
                     # api_key = env['WEBSHARE_KEY']
                     username = env['WEBSHARE_USER']
@@ -90,12 +145,15 @@ def show_page():
                     # selected_proxy = proxies.get_results[0]
                     # proxy_url = f"http://{selected_proxy.username}:{selected_proxy.password}@{selected_proxy.proxy_address}:{selected_proxy.port}"
                     
-                    proxy_url = f"http://{username}:{password}@198.23.239.134:6540"
+                    proxy_url = f"http://{username}:{password}@107.172.163.27:6543"
                     # Pobieranie wideo z YouTube
-                    st.write(proxy_url)
+                    # st.write(proxy_url)
                     with st.spinner("Pobieranie wideo z YouTube..."):
                         ydl_opts = {
                             "format": "bestaudio",
+                            # "cookies": "cookies.txt",
+                            "cookies": "merged_cookies.txt",
+                            # "cookiesfrombrowser": ('chrome',),
                             # "verbose": True,
                             # "noprogress": True,
                             # "force_generic_extractor": True,
@@ -106,12 +164,12 @@ def show_page():
                             #         "preferredquality": "128",
                             #     }
                             # ],
-                            "geo_bypass": True, # Pomijanie ograniczeń regionalnych
-                            "headers": {
-                                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-                                "Accept-Language": "en-US,en;q=0.9",
-                            },
-                            "proxy": proxy_url, #"http://mfrfapbm:hwfbps6d7o4r@198.23.239.134:6540",
+                            # "geo_bypass": True, # Pomijanie ograniczeń regionalnych
+                            # "headers": {
+                            #     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+                            #     "Accept-Language": "en-US,en;q=0.9",
+                            # },
+                            # "proxy": proxy_url, #"http://mfrfapbm:hwfbps6d7o4r@107.172.163.27:6543",
                             # "proxy": "socks4://217.145.199.47:56746",
                             "outtmpl": str(path_mp3),
 

@@ -1,0 +1,14 @@
+# Netscape HTTP Cookie File
+# https://curl.haxx.se/rfc/cookie_spec.html
+# This is a generated file! Do not edit.
+
+.youtube.com	TRUE	/	TRUE	0	YSC	bjN6ux9AuZ4
+.youtube.com	TRUE	/	TRUE	1749145562	VISITOR_PRIVACY_METADATA	CgJQTBIcEhgSFhMLFBUWFwwYGRobHB0eHw4PIBAREiEgUg%3D%3D
+.youtube.com	TRUE	/	TRUE	1768154669	PREF	f6=40000000&tz=Europe.Warsaw&repeat=NONE
+.youtube.com	TRUE	/	TRUE	1767721561	SOCS	CAISEwgDEgk3MDI0MjY3MzkaAnBsIAEaBgiAoM66Bg
+.youtube.com	TRUE	/	TRUE	1749145561	VISITOR_INFO1_LIVE	2_YU6BR4F-8
+.youtube.com	TRUE	/	TRUE	1733595362	GPS	1
+.youtube.com	TRUE	/	FALSE	1741370658	_gcl_au	1.1.1287895735.1733594659
+.youtube.com	TRUE	/	FALSE	1733594667	ST-1gq6hqw	csn=gc_uVHSo6ptzhDwk&itct=CJwBEKCzAhgAIhMI-bqerJ-WigMVn8JCBR2sVw3k
+.youtube.com	TRUE	/	FALSE	1733594674	ST-17f796q	csn=OtqaQZhfniiu_42y&itct=COMHEMn0AhgCIhMI64uOsJ-WigMVAnF6BR2_YhLu
+.youtube.com	TRUE	/	TRUE	1733595708	CONSISTENCY	AKreu9uKCQyooUmObPIX2JFHyNPzFLeHsgvOLZLu54TDL0lqRZ3QuK5yV2s6_68-L-3EWRgk6_PQx677ZvHGmbzbA_XpHSCu1-kUA5khrmoKF8MWOjTpFphIRdjwys3OIuMBnAo2Wzj5kjKQS-jd9W4
