@@ -5,6 +5,7 @@ from audiorecorder import audiorecorder
 from dotenv import dotenv_values
 from pydub import AudioSegment
 from yt_dlp import YoutubeDL
+from pytube import YouTube
 from pathlib import Path
 from io import BytesIO
 import browser_cookie3
@@ -151,7 +152,8 @@ def show_page():
                     with st.spinner("Pobieranie wideo z YouTube..."):
                         ydl_opts = {
                             "format": "bestaudio",
-                            "cookies": "cookies.txt",
+                            # "cookies": "cookies.txt",
+                            "cookiefile": "cookies.txt",
                             # "cookies": "merged_cookies.txt",
                             # "cookiesfrombrowser": ('firefox',),
                             # "verbose": True,
