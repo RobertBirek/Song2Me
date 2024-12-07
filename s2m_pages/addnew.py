@@ -153,7 +153,7 @@ def show_page():
                             "format": "bestaudio",
                             "cookies": "cookies.txt",
                             # "cookies": "merged_cookies.txt",
-                            "cookiesfrombrowser": ('firefox',),
+                            # "cookiesfrombrowser": ('firefox',),
                             # "verbose": True,
                             # "noprogress": True,
                             # "force_generic_extractor": True,
