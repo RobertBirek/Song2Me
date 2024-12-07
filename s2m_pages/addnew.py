@@ -7,7 +7,7 @@ from pydub import AudioSegment
 from yt_dlp import YoutubeDL
 from pathlib import Path
 from io import BytesIO
-from webshareproxy import ApiClient
+from webshare import ApiClient
 import requests
 
 env = dotenv_values(".env")
