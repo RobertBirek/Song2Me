@@ -5,10 +5,8 @@ from audiorecorder import audiorecorder
 from dotenv import dotenv_values
 from pydub import AudioSegment
 from yt_dlp import YoutubeDL
-from pytube import YouTube
 from pathlib import Path
 from io import BytesIO
-import browser_cookie3
 import requests
 
 env = dotenv_values(".env")
@@ -19,53 +17,6 @@ if 'WEBSHARE_USER' in st.secrets:
     env['WEBSHARE_USER'] = st.secrets['WEBSHARE_USER']
 if 'WEBSHARE_PASS' in st.secrets:
     env['WEBSHARE_PASS'] = st.secrets['WEBSHARE_PASS']
-# Ścieżka do wyników
-#######################################
-def fetch_cookies(domain_name=None):
-    """
-    Pobiera cookies z Chrome, Firefox i Edge.
-    """
-    cookies = []
-    try:
-        cookies.extend(browser_cookie3.chrome(domain_name=domain_name))
-        print("Cookies z Chrome pobrane.")
-    except Exception as e:
-        print(f"Błąd pobierania cookies z Chrome: {e}")
-
-    try:
-        cookies.extend(browser_cookie3.firefox(domain_name=domain_name))
-        print("Cookies z Firefox pobrane.")
-    except Exception as e:
-        print(f"Błąd pobierania cookies z Firefox: {e}")
-
-    try:
-        cookies.extend(browser_cookie3.edge(domain_name=domain_name))
-        print("Cookies z Edge pobrane.")
-    except Exception as e:
-        print(f"Błąd pobierania cookies z Edge: {e}")
-
-    return cookies
-
-def save_cookies_to_file(cookies, file_name):
-    """
-    Zapisuje cookies w formacie Netscape do pliku.
-    """
-    try:
-        with open(file_name, "w") as file:
-            file.write("# Netscape HTTP Cookie File\n")
-            for cookie in cookies:
-                file.write(
-                    f"{cookie.domain}\t"
-                    f"{str(cookie.secure).upper()}\t"
-                    f"{cookie.path}\t"
-                    f"{str(cookie.httpOnly).upper()}\t"
-                    f"{cookie.expires}\t"
-                    f"{cookie.name}\t"
-                    f"{cookie.value}\n"
-                )
-        print(f"Cookies zapisane do pliku {file_name}")
-    except Exception as e:
-        print(f"Błąd zapisywania cookies do pliku: {e}")
 
 ###########################################################
 def show_page():
@@ -129,14 +80,6 @@ def show_page():
 
             if youtube_url:
                 try:
-                    domain = "youtube.com"  # Możesz zmienić domenę, np. na "example.com"
-                    cookies = fetch_cookies(domain_name=domain)
-                    
-                    # Usunięcie duplikatów na podstawie nazwy ciasteczka i domeny
-                    unique_cookies = {f"{cookie.domain}:{cookie.name}": cookie for cookie in cookies}.values()
-                    
-                    save_cookies_to_file(unique_cookies, "merged_cookies.txt")
-                    
                     # Wprowadź swój klucz API
                     # api_key = env['WEBSHARE_KEY']
                     username = env['WEBSHARE_USER']

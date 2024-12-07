@@ -6,9 +6,7 @@ torchaudio
 demucs
 pydub
 yt-dlp
-pytube
 ffmpeg
 openai
 python-dotenv
 qdrant-client
-browser-cookie3
