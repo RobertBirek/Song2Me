@@ -82,13 +82,14 @@ def show_page():
             if youtube_url:
                 try:
                     # Wprowadź swój klucz API
-                    api_key = env['WEBSHARE_KEY']
+                    # api_key = env['WEBSHARE_KEY']
                     username = env['WEBSHARE_USER']
                     password = env['WEBSHARE_PASS']
                     # api_client = ApiClient(api_key)
                     # proxies = api_client.get_proxy_list()
                     # selected_proxy = proxies.get_results[0]
                     # proxy_url = f"http://{selected_proxy.username}:{selected_proxy.password}@{selected_proxy.proxy_address}:{selected_proxy.port}"
+                    
                     proxy_url = f"http://{username}:{password}@198.23.239.134:6540"
                     # Pobieranie wideo z YouTube
                     st.write(proxy_url)
