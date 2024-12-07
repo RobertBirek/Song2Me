@@ -68,81 +68,129 @@ def list_separated():
     other_path = PATH_SEPARATE / "other.mp3"
 
     ok = False
+    
     if vocal_path.exists() and vocal_path.is_file():
+        st.write("---")
         st.subheader("Utwór został podzielony na ścieżki")
+        st.write("---")
         ok = True
         st.write(":microphone: wokal")
         st.audio(str(vocal_path), format="audio/mp3")
-        with open(str(vocal_path), "rb") as file:
-            file_data = file.read()
-            st.download_button(
-                label="Pobierz wokal MP3",
-                data=file_data,
-                file_name="vocals.mp3",
-                mime="audio/mpeg"
-            )
+        c0, c1 = st.columns(2)
+        with c0:
+            with open(str(vocal_path), "rb") as file:
+                file_data = file.read()
+                st.download_button(
+                    label="Pobierz wokal MP3",
+                    data=file_data,
+                    file_name="vocals.mp3",
+                    mime="audio/mpeg"
+                )
+        with c1:
+            if is_quiet(str(vocal_path)):
+                if st.button("Plik pusty - Usuń",use_container_width=True, key="k0"):
+                    st.write("usunięto")
+    
     if drums_path.exists() and drums_path.is_file():
+        st.write("---")
         ok = True
         st.write(":long_drum: perkusja")
         st.audio(str(drums_path), format="audio/mp3")
-        with open(str(drums_path), "rb") as file:
-            file_data = file.read()
-            st.download_button(
-                label="Pobierz perkusje MP3",
-                data=file_data,
-                file_name="drums.mp3",
-                mime="audio/mpeg"
-            )
-            st.write(is_quiet(str(drums_path)))
+        c0, c1 = st.columns(2)
+        with c0:
+            with open(str(drums_path), "rb") as file:
+                file_data = file.read()
+                st.download_button(
+                    label="Pobierz perkusje MP3",
+                    data=file_data,
+                    file_name="drums.mp3",
+                    mime="audio/mpeg"
+                )
+        with c1:
+            if is_quiet(str(drums_path)):
+                if st.button("Plik pusty - Usuń",use_container_width=True, key="k1"):
+                    st.write("usunięto")    
+    
     if bass_path.exists() and bass_path.is_file():
+        st.write("---")
         ok = True
         st.write(":violin: bass")
         st.audio(str(bass_path), format="audio/mp3")
-        with open(str(bass_path), "rb") as file:
-            file_data = file.read()
-            st.download_button(
-                label="Pobierz bass MP3",
-                data=file_data,
-                file_name="bass.mp3",
-                mime="audio/mpeg"
-            )
+        c0, c1 = st.columns(2)
+        with c0:
+            with open(str(bass_path), "rb") as file:
+                file_data = file.read()
+                st.download_button(
+                    label="Pobierz bass MP3",
+                    data=file_data,
+                    file_name="bass.mp3",
+                    mime="audio/mpeg"
+                )
+        with c1:
+            if is_quiet(str(bass_path)):
+                if st.button("Plik pusty - Usuń",use_container_width=True, key="k2"):
+                    st.write("usunięto")  
+    
     if guitar_path.exists() and guitar_path.is_file():
+        st.write("---")
         ok = True
         st.write(":guitar: gitara")
         st.audio(str(guitar_path), format="audio/mp3")
-        with open(str(guitar_path), "rb") as file:
-            file_data = file.read()
-            st.download_button(
-                label="Pobierz gitara MP3",
-                data=file_data,
-                file_name="guitar.mp3",
-                mime="audio/mpeg"
-            )
+        c0, c1 = st.columns(2)
+        with c0:
+            with open(str(guitar_path), "rb") as file:
+                file_data = file.read()
+                st.download_button(
+                    label="Pobierz gitara MP3",
+                    data=file_data,
+                    file_name="guitar.mp3",
+                    mime="audio/mpeg"
+                )
+        with c1:
+            if is_quiet(str(guitar_path)):
+                if st.button("Plik pusty - Usuń",use_container_width=True, key="k3"):
+                    st.write("usunięto")  
+    
     if piano_path.exists() and piano_path.is_file():
+        st.write("---")
         ok = True
         st.write(":musical_keyboard: piano")
         st.audio(str(piano_path), format="audio/mp3")
-        with open(str(piano_path), "rb") as file:
-            file_data = file.read()
-            st.download_button(
-                label="Pobierz piano MP3",
-                data=file_data,
-                file_name="piano.mp3",
-                mime="audio/mpeg"
-            )
+        c0, c1 = st.columns(2)
+        with c0:
+            with open(str(piano_path), "rb") as file:
+                file_data = file.read()
+                st.download_button(
+                    label="Pobierz piano MP3",
+                    data=file_data,
+                    file_name="piano.mp3",
+                    mime="audio/mpeg"
+                )
+        with c1:
+            if is_quiet(str(piano_path)):
+                if st.button("Plik pusty - Usuń",use_container_width=True, key="k4"):
+                    st.write("usunięto")  
+    
     if other_path.exists() and other_path.is_file():
+        st.write("---")
         ok = True
         st.write(":notes: pozostałe")
         st.audio(str(other_path), format="audio/mp3")
-        with open(str(other_path), "rb") as file:
-            file_data = file.read()
-            st.download_button(
-                label="Pobierz other MP3",
-                data=file_data,
-                file_name="other.mp3",
-                mime="audio/mpeg"
-            )
-    
+        c0, c1 = st.columns(2)
+        with c0:
+            with open(str(other_path), "rb") as file:
+                file_data = file.read()
+                st.download_button(
+                    label="Pobierz other MP3",
+                    data=file_data,
+                    file_name="other.mp3",
+                    mime="audio/mpeg"
+                )
+        with c1:
+            if is_quiet(str(other_path)):
+                if st.button("Plik pusty - Usuń",use_container_width=True, key="k5"):
+                    st.write("usunięto")  
+
     return ok
 
 ######################################################################
@@ -157,17 +205,26 @@ def show_page():
         if (path_mp3.exists()) and (path_mp3.is_file()):
             st.subheader("Utwór został wczytany")
             st.audio(st.session_state.uploaded_mp3, format="audio/mp3")
-            with open(st.session_state.uploaded_mp3, "rb") as file:
-                file_data = file.read()
-                st.download_button(
-                    label="Pobierz MP3",
-                    data=file_data,
-                    file_name="new.mp3",
-                    mime="audio/mpeg"
-                )
+            c0, c1 = st.columns(2)
+            with c0:
+                with open(st.session_state.uploaded_mp3, "rb") as file:
+                    file_data = file.read()
+                    st.download_button(
+                        label="Pobierz MP3",
+                        data=file_data,
+                        file_name="new.mp3",
+                        mime="audio/mpeg"
+                    )
+            with c1:
+                if st.button("Wczytaj nowy",use_container_width=True):
+                    st.session_state.uploaded_mp3 = None
+                    st.session_state.new = True
+                    st.session_state.current_menu = "page_addnew"
+                    st.rerun()
 
             # list_separated()
             if not list_separated():
+                st.write("---")
                 if st.button("Separuj ścieżki",use_container_width=True, key="s1"):
                     separate_mp3()
         else:
