@@ -2,13 +2,18 @@
 
 import streamlit as st
 import time
+import json
+from dotenv import dotenv_values
 
 # Przykładowa baza użytkowników
-users = {
-    "admin": "1234",
-    "robert": "1234",
-    "test": "1234"
-}
+
+env = dotenv_values(".env")
+
+if 'USERS' in st.secrets:
+    env['USERS'] = st.secrets['USERS']
+
+users_env = env.get("USERS", "{}")  # Pobiera zmienną USERS jako string
+users = json.loads(users_env)  # Konwertuje string JSON na słownik
 
 def show_page():
     st.title(":notes: Song2me")
