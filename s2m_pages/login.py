@@ -12,8 +12,10 @@ env = dotenv_values(".env")
 if 'USERS' in st.secrets:
     env['USERS'] = st.secrets['USERS']
 
-users_env = env.get("USERS", "{}")  # Pobiera zmienną USERS jako string
-users = json.loads(users_env)  # Konwertuje string JSON na słownik
+
+# Pobranie i przetworzenie zmiennej USERS
+users_env = env.get("USERS", "")
+users = dict(user.split(":") for user in users_env.split(";") if user)
 
 def show_page():
     st.title(":notes: Song2me")
