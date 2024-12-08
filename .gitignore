@@ -1,3 +1,4 @@
 .env
+.cache
 users
 s2m_pages/__pycache__
