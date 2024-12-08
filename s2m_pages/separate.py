@@ -7,11 +7,12 @@ import numpy as np
 from pydub import AudioSegment
 
 ######################################################################
-def is_quiet(file_path, threshold_db=-30):
+def is_quiet(file_path, threshold_db=-40):
     audio = AudioSegment.from_file(file_path)
     avg_dbfs = audio.dBFS  # Obliczanie średniego poziomu głośności w dBFS
+    max_dbfs = audio.max_dBFS
 
-    print(f"Średnia głośność pliku: {avg_dbfs:.2f} dBFS")
+    print(f"Średnia głośność pliku: {avg_dbfs:.2f} dBFS  Max: {max_dbfs:.2f} dBFS")
     return avg_dbfs < threshold_db
 ######################################################################
 def separate_mp3():
