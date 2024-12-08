@@ -179,7 +179,7 @@ def show_page():
                         #audio = AudioSegment.from_file(file_bytes, format=uploaded_file.type.split("/")[-1])
                         audio = AudioSegment.from_file(file_bytes)
                         mp3_buffer = BytesIO()
-                        audio.export(mp3_buffer, format="mp3", bitrate="128k")
+                        audio.export(mp3_buffer, format="mp3", bitrate="256k")
                     
                     # Zapis do pliku lokalnego
                     with open(path_mp3, "wb") as f:
@@ -199,7 +199,7 @@ def show_page():
             if rec_audio:
                 # Tworzenie obiektu BytesIO do przechowywania nagrania
                 audio = BytesIO()
-                rec_audio.export(audio, format="mp3")  # Eksport do formatu MP3
+                rec_audio.export(audio, format="mp3", bitrate="128k")  # Eksport do formatu MP3
                 rec_audio_bytes = audio.getvalue()  # Pobranie danych binarnych
                 # Zapisanie pliku MP3 na dysk jako "new.mp3"
                 with open(path_mp3, "wb") as f:
@@ -225,7 +225,7 @@ def show_page():
                     with st.spinner("Konwertowanie pliku do formatu MP3..."):
                         audio = AudioSegment.from_file(path_mp3)
                         mp3_buffer = BytesIO()
-                        audio.export(mp3_buffer, format="mp3", bitrate="128k")  # Konwersja do MP3 z bitrate 320 kbps
+                        audio.export(mp3_buffer, format="mp3", bitrate="256k")  # Konwersja do MP3 z bitrate 320 kbps
 
                     # Zapis pliku MP3 na dysku
                     with open(path_mp3, "wb") as f:
@@ -255,7 +255,7 @@ def show_page():
                     with st.spinner("Konwertowanie pliku do formatu MP3..."):
                         audio = AudioSegment.from_file(path_mp3)
                         mp3_buffer = BytesIO()
-                        audio.export(mp3_buffer, format="mp3", bitrate="128k")  # Konwersja do MP3 z bitrate 320 kbps
+                        audio.export(mp3_buffer, format="mp3", bitrate="256k")  # Konwersja do MP3 z bitrate 320 kbps
 
                     # Zapis pliku MP3 na dysku
                     with open(path_mp3, "wb") as f:
