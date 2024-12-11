@@ -335,6 +335,9 @@ def show_page():
  
         # recognize_music(str(path_mp3))
 
+    if st.button("Przejdź do separacji ścieżek",use_container_width=True):
+            st.session_state.current_menu = "page_sep"
+
     if (path_mp3.exists()) and (path_mp3.is_file()): #uploaded_file or rec_audio or youtube_url:
         
         st.audio(str(path_mp3))
