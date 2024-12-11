@@ -38,12 +38,9 @@ sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
     client_secret = env['SPOTIFY_CLIENT_SECRET']
 ))
 
-if "username" not in st.session_state:
-    st.session_state.username = None
-else:
-    PATH_UPLOAD = Path("users") / st.session_state.username / "songs" / "new"
-    path_mp3 = PATH_UPLOAD / "new.mp3"
-    config_mp3 = PATH_UPLOAD / "new.cfg"
+
+path_mp3 = ""
+config_mp3 = ""
 
 ##############################################################
 def load_info():
@@ -251,6 +248,9 @@ def get_spotify_track(track_url):
 
 ##############################################################
 def show_page():
+    PATH_UPLOAD = Path("users") / st.session_state.username / "songs" / "new"
+    path_mp3 = PATH_UPLOAD / "new.mp3"
+    config_mp3 = PATH_UPLOAD / "new.cfg"
     st.title(":musical_note: Song info")
     st.header("Inormacje o utworze")
     info= load_info()
