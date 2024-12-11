@@ -6,7 +6,7 @@ import configparser
 import os
 
 # Ścieżka do pliku konfiguracji
-USER_PATH= Path("users") / str(st.session_state.username)
+USER_PATH = ""
 CONFIG_FILE = USER_PATH / "setup.cfg"
 COOKIE_FILE = USER_PATH / "cookies.txt"
 
@@ -49,6 +49,11 @@ def save_settings(config):
 def show_page():
     st.title(":hammer_and_wrench: Ustawienia")
     st.header("Ustawienia")
+    # Ścieżka do pliku konfiguracji
+    USER_PATH= Path("users") / str(st.session_state.username)
+    CONFIG_FILE = USER_PATH / "setup.cfg"
+    COOKIE_FILE = USER_PATH / "cookies.txt"
+
     config = load_settings()
     help = """Pobierz i zainstaluj narzędzie do eksportu plików cookie, takie jak EditThisCookie (dla Chrome) lub Cookies.txt (dla Firefox).
 Zaloguj się na YouTube w przeglądarce, a następnie użyj rozszerzenia, aby wyeksportować pliki cookie jako plik cookies.txt.
