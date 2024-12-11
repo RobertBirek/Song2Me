@@ -292,6 +292,7 @@ def show_page():
     if st.button("Pobierz informacje o utworze",use_container_width=True):
         with st.spinner("W trakcie rozpoznawania"):
             recognize_music(str(path_mp3))
+            st.rerun()
     
     if st.button("Zapisz informacje o utworze",use_container_width=True):
         with st.spinner("Zapisywanie"):
