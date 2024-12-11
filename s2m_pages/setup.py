@@ -7,9 +7,8 @@ import os
 
 # Ścieżka do pliku konfiguracji
 USER_PATH = ""
-CONFIG_FILE = USER_PATH / "setup.cfg"
-COOKIE_FILE = USER_PATH / "cookies.txt"
-
+CONFIG_FILE = ""
+COOKIE_FILE = ""
 ############################################
 def generate_cookies_file(cookies_data, output_file="cookies.txt"):
     """
