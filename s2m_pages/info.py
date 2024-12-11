@@ -85,14 +85,14 @@ def save_info():
     config = configparser.ConfigParser(interpolation=None)  # Wyłączenie interpolacji
 
     config["TRACK"] = {
-            "title": str(st.session_state["mp3_info"].get("title", "Unknown")),
-            "artist": str(st.session_state["mp3_info"].get("artist", "Unknown")),
-            "album": str(st.session_state["mp3_info"].get("album", "Unknown")),
-            "track_number": str(st.session_state["mp3_info"].get("track_number", None)),
-            "release_date": str(st.session_state["mp3_info"].get("release_date", "Unknown")),
-            "genres": str(st.session_state["mp3_info"].get("genres", "Unknown")),
-            "spotify_url": str(st.session_state["mp3_info"].get("spotify_url", None)),
-            "album_image": str(st.session_state["mp3_info"].get("album_image", None))           
+            "title": str(st.session_state["mp3_info"].get("title", "")),
+            "artist": str(st.session_state["mp3_info"].get("artist", "")),
+            "album": str(st.session_state["mp3_info"].get("album", "")),
+            "track_number": str(st.session_state["mp3_info"].get("track_number", "")),
+            "release_date": str(st.session_state["mp3_info"].get("release_date", "")),
+            "genres": str(st.session_state["mp3_info"].get("genres", "")),
+            "spotify_url": str(st.session_state["mp3_info"].get("spotify_url", "")),
+            "album_image": str(st.session_state["mp3_info"].get("album_image", ""))           
         }
 
     with open(config_mp3, "w") as configfile:
@@ -296,7 +296,7 @@ def show_page():
     
     if st.button("Zapisz informacje o utworze",use_container_width=True):
         with st.spinner("Zapisywanie"):
-            save_info()
+            # save_info()
             audio = MP3(path_mp3, ID3=EasyID3)
             # Dodawanie metadanych
             audio["title"] = st.session_state['mp3_info']['title']

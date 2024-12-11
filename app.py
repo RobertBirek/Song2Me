@@ -9,7 +9,7 @@ import subprocess
 import requests
 import numpy as np
 from pydub import AudioSegment
-from s2m_pages import menu, main, info, find, addnew, separate, mix, login, about, setup
+from s2m_pages import menu, main, info, find, addnew, separate, mix, login, about, setup, text
 
 ######################################################
 
@@ -176,4 +176,7 @@ else:
     #############################################################
     elif st.session_state.current_menu == "page_setup":
         setup.show_page()
+    #############################################################
+    elif st.session_state.current_menu == "page_txt":
+        text.show_page()
     #############################################################
