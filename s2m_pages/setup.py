@@ -50,10 +50,14 @@ def show_page():
     st.title(":hammer_and_wrench: Ustawienia")
     st.header("Ustawienia")
     config = load_settings()
+    help = """Pobierz i zainstaluj narzędzie do eksportu plików cookie, takie jak EditThisCookie (dla Chrome) lub Cookies.txt (dla Firefox).
+Zaloguj się na YouTube w przeglądarce, a następnie użyj rozszerzenia, aby wyeksportować pliki cookie jako plik cookies.txt.
+Otwórz plik cookies.txt i znajdź linie zaczynające się od .youtube.com – będą zawierały dane sesji niezbędne do uwierzytelnienia."""
     use_proxy = st.checkbox("Używaj proxy", value=config['settings'].getboolean('use_proxy'))
     cookies = st.text_area(
         "Wprowadź dane cookies (w formacie Netscape HTTP Cookie File):",
-        value=config['settings'].get('cookies', '')
+        value=config['settings'].get('cookies', ''),
+        help=help
     )
 
     if st.button("Zapisz ustawienia"):
