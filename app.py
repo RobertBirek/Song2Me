@@ -78,6 +78,7 @@ def fetch_proxy_list():
         list: Lista serwerów proxy (każdy jako string "ip:port:username:password").
     """
     download_url = env['PROXY_URL']
+    print(download_url)
     try:
         # Pobranie listy proxy
         response = requests.get(download_url)
@@ -92,7 +93,17 @@ def fetch_proxy_list():
 
 if "new" not in st.session_state:
     st.session_state.new = False
-
+if "mp3_info" not in st.session_state:
+    st.session_state["mp3_info"] = None
+    st.session_state['mp3_info'] = {
+            "title": "",
+            "artist": "",
+            "album": "",
+            "genres": "",
+            "track_number": "",
+            "release_date": "",
+            "album_image": ""
+        }
 if "current_menu" not in st.session_state:
     st.session_state.current_menu = None
 if "uploaded_mp3" not in st.session_state:
@@ -115,6 +126,8 @@ if "current_proxy" not in st.session_state:
     st.session_state.current_proxy = None
 if "use_proxy" not in st.session_state:
     st.session_state.use_proxy = False
+if "mp3_download_format" not in st.session_state:
+    st.session_state.mp3_download_format = "{track_nr} {title} - {artist} - {album}"
 ######################################################
 if (st.session_state.new == True):
     delete_new_song(st.session_state.username)
@@ -126,8 +139,9 @@ if (st.session_state.username is not None) and (st.session_state.logged_in == Tr
 if not st.session_state.logged_in:
     login.show_page()
 else:
+    # st.write(st.session_state.use_proxy)
     if st.session_state.use_proxy:
-        if "proxy_list" not in st.session_state:
+        if st.session_state.current_proxy is None:
             proxy_list = fetch_proxy_list()
             if proxy_list:
                 st.session_state["proxy_list"] = proxy_list

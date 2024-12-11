@@ -10,9 +10,8 @@ from spotipy.oauth2 import SpotifyClientCredentials
 from pathlib import Path
 from io import BytesIO
 import random
-import subprocess
+import configparser
 import os
-import requests
 
 env = dotenv_values(".env")
 
@@ -28,11 +27,20 @@ if 'SPOTIFY_CLIENT_SECRET' in st.secrets:
     env['SPOTIFY_CLIENT_SECRET'] = st.secrets['SPOTIFY_CLIENT_SECRET']
 if 'PROXY_URL' in st.secrets:
     env['PROXY_URL'] = st.secrets['PROXY_URL']
+
 # Autoryzacja
 sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
     client_id = env['SPOTIFY_CLIENT_ID'],
     client_secret = env['SPOTIFY_CLIENT_SECRET']
 ))
+
+if "username" not in st.session_state:
+    st.session_state.username = None
+else:
+    PATH_UPLOAD = Path("users") / st.session_state.username / "songs" / "new"
+    path_mp3 = PATH_UPLOAD / "new.mp3"
+    config_mp3 = PATH_UPLOAD / "new.cfg"
+
 ###########################################################
 # Pobranie informacji o utworze
 def get_spotify_track(track_url):
@@ -47,10 +55,35 @@ def get_spotify_track(track_url):
         album = track['album']['name']
         # duration_ms = track['duration_ms']
         # duration_min = duration_ms / 60000  # Konwersja na minuty
-        # track_number = track['track_number']
+        track_number = track['track_number']
         # album_total_tracks = track['album']['total_tracks']
         release_date = track['album']['release_date']
-        # album_image = track['album']['images'][0]['url'] if track['album']['images'] else None
+        album_image = track['album']['images'][0]['url'] if track['album']['images'] else None
+
+        # Zapis danych do st.session_state
+        st.session_state['mp3_info'] = {
+            "title": title,
+            "artist": artist,
+            "album": album,
+            "genres": "",
+            "track_number": track_number,
+            "release_date": release_date,
+            "album_image": album_image
+        }
+
+        # # Sprawdzenie i wyświetlenie danych utworu
+        # if 'mp3_info' in st.session_state:
+        #     track = st.session_state['mp3_info']
+        #     st.write("Aktualny utwór:")
+        #     st.text(f"{track['artist']} - {track['title']}")
+        #     st.text(f"Album: {track['album']} ({track['release_date']})")
+        #     if track['album_image']:
+        #         st.image(track['album_image'], caption="Okładka albumu")
+        
+        config = configparser.ConfigParser(interpolation=None)
+        if os.path.exists(config_mp3):
+            config.read(config_mp3)
+
         print(f"Utwór: {artist} - {title} z Albumu {album} - {release_date}" )
         return f"{artist} - {title} {album} {release_date}"
     except Exception as e:
@@ -97,50 +130,69 @@ def download_from_youtube(url, query, out_path):
     if COOKIE_FILE.exists() and COOKIE_FILE.is_file():
         cookies = str(COOKIE_FILE)
     
-   
-    proxy = st.session_state.current_proxy
+    # proxies = st.session_state["proxy_list"]
+    # st.write(proxies[0])
+    # current_proxy_index = 0
+    # # proxy = st.session_state.current_proxy
+
+    success = False
  
-    ydl_opts = {
-        "format": "bestaudio",
-        "cookiefile": cookies, #"cookies.txt",
-        # "cookiesfrombrowser": ('firefox',),
-        # "verbose": True,
-        # "noprogress": True,
-        # "force_generic_extractor": True,
-        # "postprocessors": [
-        #     {
-        #         "key": "FFmpegExtractAudio",
-        #         "preferredcodec": "mp3",
-        #         "preferredquality": "128",
-        #     }
-        # ],
-        "geo_bypass": True, # Pomijanie ograniczeń regionalnych
-        "headers": {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-            "Accept-Language": "en-US,en;q=0.9",
-        },
-        "proxy": proxy,
-        "outtmpl": str(out_path),
+    while not success:
+        proxy = get_random_proxy_from_state()
+        st.session_state.current_proxy = proxy
 
-    }
-    try:
-        with YoutubeDL(ydl_opts) as ydl:
-            if url is not None:
-                ydl.download([url])
-            else:
-                if query is not None:
-                    ydl.download([f"ytsearch:{query}"])
+        ydl_opts = {
+            "format": "bestaudio/best",
+            "cookiefile": cookies, #"cookies.txt",
+            # "cookiesfrombrowser": ('firefox',),
+            # "verbose": True,
+            # "noprogress": True,
+            # "force_generic_extractor": True,
+            # "postprocessors": [
+            #     {
+            #         "key": "FFmpegExtractAudio",
+            #         "preferredcodec": "mp3",
+            #         "preferredquality": "128",
+            #     }
+            # ],
+            "geo_bypass": True, # Pomijanie ograniczeń regionalnych
+            "headers": {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+                "Accept-Language": "en-US,en;q=0.9",
+            },
+            "proxy": proxy,
+            "outtmpl": str(out_path),
+        }
+        try:
+            with YoutubeDL(ydl_opts) as ydl:
+                if url is not None:
+                    ydl.download([url])
+                else:
+                    if query is not None:
+                        ydl.download([f"ytsearch:{query}"])
+            success = True
+                
+        except Exception as e:
+            print(f"Błąd podczas pobierania '{query}': {e}")
+            success = False
 
-            
-    except Exception as e:
-        print(f"Błąd podczas pobierania '{query}': {e}")
-
+    if not success:
+        print("Nie udało się pobrać pliku. Wszystkie proxy zostały wypróbowane.")
+        st.error("Nie udało się pobrać pliku. Wszystkie proxy zostały wypróbowane.")
 ###########################################################
 def show_page():
 
     PATH_UPLOAD = Path("users") / st.session_state.username / "songs" / "new"
     PATH_UPLOAD.mkdir(parents=True, exist_ok=True)
-
+    st.session_state['mp3_info'] = {
+        "title": "",
+        "artist": "",
+        "album": "",
+        "genres": "",
+        "track_number": "",
+        "release_date": "",
+        "album_image": ""
+    }
     path_mp3 = PATH_UPLOAD / "new.mp3"
 
     st.title(":musical_score: Dodajmy nowy utwór")
@@ -212,29 +264,30 @@ def show_page():
             youtube_url = st.text_input("Podaj link do YouTube")
             url = None
             query = None
-            if youtube_url:
-                try:
-                    url = youtube_url
-                    with st.spinner("Pobieranie wideo z YouTube..."):
-                        print("Rozpoczynam pobieranie...")
-                        download_from_youtube(url,query,str(path_mp3))
-                        print("Proces pobierania zakończony.")
-                        
+            if st.button("Wczytaj",use_container_width=True, key="b_yt"):
+                if youtube_url:
+                    try:
+                        url = youtube_url
+                        with st.spinner("Pobieranie wideo z YouTube..."):
+                            print("Rozpoczynam pobieranie...")
+                            download_from_youtube(url,query,str(path_mp3))
+                            print("Proces pobierania zakończony.")
+                            
 
-                    # Konwersja audio na MP3
-                    with st.spinner("Konwertowanie pliku do formatu MP3..."):
-                        audio = AudioSegment.from_file(path_mp3)
-                        mp3_buffer = BytesIO()
-                        audio.export(mp3_buffer, format="mp3", bitrate="256k")  # Konwersja do MP3 z bitrate 320 kbps
+                        # Konwersja audio na MP3
+                        with st.spinner("Konwertowanie pliku do formatu MP3..."):
+                            audio = AudioSegment.from_file(path_mp3)
+                            mp3_buffer = BytesIO()
+                            audio.export(mp3_buffer, format="mp3", bitrate="256k")  # Konwersja do MP3 z bitrate 320 kbps
 
-                    # Zapis pliku MP3 na dysku
-                    with open(path_mp3, "wb") as f:
-                        f.write(mp3_buffer.getvalue())
-                    st.success("Plik został zapisany jako 'new.mp3'.")
+                        # Zapis pliku MP3 na dysku
+                        with open(path_mp3, "wb") as f:
+                            f.write(mp3_buffer.getvalue())
+                        st.success("Plik został zapisany jako 'new.mp3'.")
 
-                except Exception as e:
-                    # st.write("")
-                    st.error(f"Wystąpił błąd: {e}")
+                    except Exception as e:
+                        # st.write("")
+                        st.error(f"youtube Wystąpił błąd: {e}")
 ##########
         with add_spotify:
             st.subheader("Pobierz Muzykę ze Spotify")
@@ -242,28 +295,29 @@ def show_page():
             spotify_link = st.text_input("Wklej link do utworu, albumu lub playlisty Spotify:")
             url = None
             query = None
-            if spotify_link:
-                query = get_spotify_track(spotify_link)
+            if st.button("Wczytaj",use_container_width=True, key="b_sf"):
+                if spotify_link:
+                    query = get_spotify_track(spotify_link)
 
-            if query:
-                try:
-                    with st.spinner("Pobieranie wideo z YouTube..."):
-                        print("Rozpoczynam pobieranie...")
-                        download_from_youtube(url, query, str(path_mp3))
-                        print("Proces pobierania zakończony.")
-                    # Konwersja audio na MP3
-                    with st.spinner("Konwertowanie pliku do formatu MP3..."):
-                        audio = AudioSegment.from_file(path_mp3)
-                        mp3_buffer = BytesIO()
-                        audio.export(mp3_buffer, format="mp3", bitrate="256k")  # Konwersja do MP3 z bitrate 320 kbps
+                if query:
+                    try:
+                        with st.spinner("Pobieranie wideo z YouTube..."):
+                            print("Rozpoczynam pobieranie...")
+                            download_from_youtube(url, query, str(path_mp3))
+                            print("Proces pobierania zakończony.")
+                        # Konwersja audio na MP3
+                        with st.spinner("Konwertowanie pliku do formatu MP3..."):
+                            audio = AudioSegment.from_file(path_mp3)
+                            mp3_buffer = BytesIO()
+                            audio.export(mp3_buffer, format="mp3", bitrate="256k")  # Konwersja do MP3 z bitrate 320 kbps
 
-                    # Zapis pliku MP3 na dysku
-                    with open(path_mp3, "wb") as f:
-                        f.write(mp3_buffer.getvalue())
-                    st.success("Plik został zapisany jako 'new.mp3'.")
-                except Exception as e:
-                    # st.write("")
-                    st.error(f"Wystąpił błąd: {e}")
+                        # Zapis pliku MP3 na dysku
+                        with open(path_mp3, "wb") as f:
+                            f.write(mp3_buffer.getvalue())
+                        st.success("Plik został zapisany jako 'new.mp3'.")
+                    except Exception as e:
+                        # st.write("")
+                        st.error(f"spotify Wystąpił błąd: {e}")
             # else:
             #     st.error("Nie znaleziono utworów do pobrania.")
 
@@ -272,10 +326,15 @@ def show_page():
 ##########
         if (path_mp3.exists()) and (path_mp3.is_file()): #uploaded_file or rec_audio or youtube_url:
             st.audio(str(path_mp3))
+
             if st.button("Wczytaj nowy",use_container_width=True):
                 st.session_state.uploaded_mp3 = None
                 st.session_state.new = True
                 st.session_state.current_menu = "page_addnew"
+                st.rerun()
+            if st.button("Informacja o utworze",use_container_width=True):
+                st.session_state.uploaded_mp3 = str(path_mp3)
+                st.session_state.current_menu = "page_info"
                 st.rerun()
             if st.button("Przejdź do separacji ścieżek",use_container_width=True):
                 st.session_state.uploaded_mp3 = str(path_mp3)
@@ -285,12 +344,15 @@ def show_page():
     else:
         if (path_mp3.exists()) and (path_mp3.is_file()):
             st.subheader("Plik został już wczytany")
-            st.audio(st.session_state.uploaded_mp3) 
+            st.audio(str(path_mp3)) 
 
             if st.button("Wczytaj nowy",use_container_width=True):
                 st.session_state.uploaded_mp3 = None
                 st.session_state.new = True
                 st.session_state.current_menu = "page_addnew"
+                st.rerun()
+            if st.button("Informacja o utworze",use_container_width=True):
+                st.session_state.current_menu = "page_info"
                 st.rerun()
             if st.button("Przejdź do separacji ścieżek",use_container_width=True):
                 st.session_state.current_menu = "page_sep"

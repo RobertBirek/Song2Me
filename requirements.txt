@@ -7,6 +7,8 @@ demucs
 pydub
 yt-dlp
 spotipy
+mutagen
+acrcloud
 ffmpeg
 openai
 python-dotenv

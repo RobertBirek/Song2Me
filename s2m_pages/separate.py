@@ -1,10 +1,25 @@
 # separate.py
 
 import streamlit as st
+from dotenv import dotenv_values
 from pathlib import Path
 import subprocess
 import numpy as np
 from pydub import AudioSegment
+from io import BytesIO
+import requests
+import base64
+import json
+
+env = dotenv_values(".env")
+
+if 'ACR_ACCESS_KEY' in st.secrets:
+    env['ACR_ACCESS_KEY'] = st.secrets['ACR_ACCESS_KEY']
+if 'ACR_SECRET_KEY' in st.secrets:
+    env['ACR_SECRET_KEY'] = st.secrets['ACR_SECRET_KEY']
+
+
+######################################################################
 
 ######################################################################
 def is_quiet(file_path, threshold_db=-40):
@@ -205,7 +220,7 @@ def show_page():
     if st.session_state.uploaded_mp3 is not None:
         if (path_mp3.exists()) and (path_mp3.is_file()):
             st.subheader("Utwór został wczytany")
-            st.audio(st.session_state.uploaded_mp3, format="audio/mp3")
+            st.audio(st.session_state.uploaded_mp3, format="audio/mp3")            
             c0, c1 = st.columns(2)
             with c0:
                 with open(st.session_state.uploaded_mp3, "rb") as file:

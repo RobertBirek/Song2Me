@@ -1,5 +1,10 @@
+v3.4
+Dodanie proxy przez https://www.webshare.io
+Dodanie rozpoznawanie utworu i jego danych przez https://www.acrcloud.com/
+Zapisanie danych do pliku mp3
+Pobieranie pliku z danymi i wg wzorca
 v3.3
-dodawanie plików z różnych formatów
+dodawanie plików z różnych formatów Youtube i inne, Spotify
 dodawanie plików z nagrań z mikrofonu
 usuwanie plików "cichych"
 
