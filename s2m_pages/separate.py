@@ -217,9 +217,13 @@ def show_page():
 
     path_mp3 = Path(st.session_state.uploaded_mp3)
 
+    song = ""
+    if st.session_state['mp3_info']['title'] is not "":
+        song =str(f"{st.session_state['mp3_info']['artist']} - {st.session_state['mp3_info']['title']}")
+
     if st.session_state.uploaded_mp3 is not None:
         if (path_mp3.exists()) and (path_mp3.is_file()):
-            st.subheader("Utwór został wczytany")
+            st.subheader(f"Utwór został wczytany: {song}")
             st.audio(st.session_state.uploaded_mp3, format="audio/mp3")            
             c0, c1 = st.columns(2)
             with c0:

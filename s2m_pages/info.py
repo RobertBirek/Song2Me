@@ -252,14 +252,15 @@ def show_page():
     path_mp3 = PATH_UPLOAD / "new.mp3"
     config_mp3 = PATH_UPLOAD / "new.cfg"
     st.title(":musical_note: Song info")
-    st.header("Inormacje o utworze")
+
+    song = ""
+    if st.session_state['mp3_info']['title'] is not "":
+        song =str(f"{st.session_state['mp3_info']['artist']} - {st.session_state['mp3_info']['title']}")
+
+    st.header(f"Inormacje o utworze: {song}")
     info= load_info()
     
-    # save_info()
-    if st.session_state['mp3_info']['title']:
-        st.write("---")
-        st.subheader(f"{st.session_state['mp3_info']['artist']} - {st.session_state['mp3_info']['title']}")
-        st.write("---")
+    st.write("---")
 
     c0, c1 = st.columns([6,4]) #([8,2])
     with c0:
