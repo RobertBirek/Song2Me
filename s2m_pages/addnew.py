@@ -139,7 +139,7 @@ def download_from_youtube(url, query, out_path):
         st.session_state.current_proxy = proxy
 
         ydl_opts = {
-            "format": "bestaudio/best",
+            "format": "bestaudio", #"bestaudio/best",
             "cookiefile": cookies, #"cookies.txt",
             # "cookiesfrombrowser": ('firefox',),
             # "verbose": True,
