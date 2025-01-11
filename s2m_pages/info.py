@@ -99,104 +99,96 @@ def save_info():
         config.write(configfile)
 
 ##############################################################
-def recognize_music(file_path, start_time=30, duration=10):
-    # Konfiguracja
-    access_key = env['ACR_ACCESS_KEY']
-    access_secret = env['ACR_SECRET_KEY']
-    requrl = 'https://identify-eu-west-1.acrcloud.com/v1/identify'
-    http_method = 'POST'
-    http_uri = '/v1/identify'
-    data_type = 'audio'
-    signature_version = '1'
-    timestamp = str(int(time.time()))
- 
-    # trimm 10sek
-    filet_path = Path("users") / st.session_state.username / "songs" / "new" / "trimmed.mp3"
-    # file_path = "trimmed.mp3"
-    # Wczytanie pliku audio
-    audio = AudioSegment.from_file(file_path)
-    # Przycinanie do pierwszych `duration` sekund
-    start_ms = start_time * 1000  # Konwersja na milisekundy
-    end_ms = start_ms + (duration * 1000)
-    trimmed_audio = audio[start_ms:end_ms]  # Konwersja na milisekundy
-    trimmed_audio.export(filet_path, format="mp3")
+def recognize_music(file_path, start_time=0, duration=10, max_attempts=5):
+    try:
+        # Konfiguracja
+        access_key = env['ACR_ACCESS_KEY']
+        access_secret = env['ACR_SECRET_KEY']
+        requrl = 'https://identify-eu-west-1.acrcloud.com/v1/identify'
+        http_method = 'POST'
+        http_uri = '/v1/identify'
+        data_type = 'audio'
+        signature_version = '1'
+        
+        attempts = 0
+        while attempts < max_attempts:
+            # Przycinanie audio
+            trimmed_path = Path("users") / st.session_state.username / "songs" / "new" / "trimmed.mp3"
+            audio = AudioSegment.from_file(file_path)
+            start_ms = start_time * 1000
+            end_ms = start_ms + (duration * 1000)
+            trimmed_audio = audio[start_ms:end_ms]
+            trimmed_audio.export(trimmed_path, format="mp3")
+        
+            # Obliczanie sygnatury
+            timestamp = str(int(time.time()))
+            string_to_sign = f"{http_method}\n{http_uri}\n{access_key}\n{data_type}\n{signature_version}\n{timestamp}"
+            sign = base64.b64encode(
+                hmac.new(
+                    access_secret.encode('utf-8'),
+                    string_to_sign.encode('utf-8'),
+                    digestmod=hashlib.sha1
+                ).digest()
+            ).decode('utf-8')
 
-    # Wczytanie pliku audio
-    with open(filet_path, 'rb') as f:
-        sample_bytes = os.path.getsize(filet_path)
-        filet_data = f.read()
-
-    # Obliczanie sygnatury
-    string_to_sign = f"{http_method}\n{http_uri}\n{access_key}\n{data_type}\n{signature_version}\n{timestamp}"
-    sign = base64.b64encode(hmac.new(access_secret.encode('utf-8'), string_to_sign.encode('utf-8'), digestmod=hashlib.sha1).digest()).decode('utf-8')
-
-
-      # Przygotowanie danych do wysłania
-    # Przygotowanie danych do wysłania
-    files = {
-        'sample': (os.path.basename(filet_path), filet_data, 'audio/mpeg')
-    }
-    data = {
-        'access_key': access_key,
-        'sample_bytes': sample_bytes,
-        'timestamp': timestamp,
-        'signature': sign,
-        'data_type': data_type,
-        'signature_version': signature_version
-    }
-
-    # Wysłanie żądania
-    response = requests.post(requrl, files=files, data=data)
-    parsed_data = response.json()
-    msg = parsed_data["status"]["msg"]
-    if msg == "No result":
-        start_ms = start_ms * 2
-        recognize_music(file_path, start_ms)
-    if response.status_code == 200:
-        parsed_data = response.json()
-        # st.write("Odpowiedź z API:", parsed_data)
-        spotify_url = None
-        for track in parsed_data["metadata"]["music"]:
-            title = track.get("title", "Nieznany tytuł")
-            artists = ", ".join([artist.get("name") for artist in track.get("artists", [])])
-            album = track.get("album", {}).get("name", "Nieznany album")
-            release_date = track.get("release_date", "Brak daty")
-            genres = ", ".join([genre.get("name") for genre in track.get("genres", [])])
-            spotify_track_id = track.get("external_metadata", {}).get("spotify", {}).get("track", {}).get("id")
-            spotify_url = track.get("external_metadata", {}).get("spotify", {}).get("track", {}).get("id")
-            # Link do obrazu albumu
-            spotify_album_id = track.get("external_metadata", {}).get("spotify", {}).get("album", {}).get("id")
-            album_image = f"https://i.scdn.co/image/{spotify_album_id}" if spotify_album_id else None
-            
-            # print(f"Tytuł: {title}")
-            # print(f"Artyści: {', '.join(artists)}")
-            # print(f"Album: {album}")
-            # print(f"Data wydania: {release_date}")
-            # print(f"Gatunki: {', '.join(genres)}")
-            # if spotify_url:
-                # get_spotify_track(spotify_url)
-            #     print(f"Link do Spotify: https://open.spotify.com/track/{spotify_url}")
-            # print("-" * 30)
-            
-            # Zapis danych do st.session_state
-            st.session_state['mp3_info'] = {
-                "title": title,
-                "track_number": "",
-                "artist": artists,
-                "album": album,
-                "genres": genres,
-                "release_date": release_date,
-                "spotify_url": spotify_url,
-                "album_image": album_image
+            # Przygotowanie danych do wysłania
+            with open(trimmed_path, 'rb') as f:
+                file_data = f.read()
+            files = {'sample': ('trimmed.mp3', file_data, 'audio/mpeg')}
+            data = {
+                'access_key': access_key,
+                'sample_bytes': len(file_data),
+                'timestamp': timestamp,
+                'signature': sign,
+                'data_type': data_type,
+                'signature_version': signature_version
             }
-        
-        if spotify_url:
-            get_spotify_track(spotify_url)
 
-        
-        return True #response.json()
-    else:
-        # print(f"error: {response.status_code}, message: {response.text}")
+            # Wysłanie żądania
+            response = requests.post(requrl, files=files, data=data)
+            # st.write(response)
+            if response.status_code == 200:
+                parsed_data = response.json()
+                if "metadata" in parsed_data and "music" in parsed_data["metadata"]:
+                    for track in parsed_data["metadata"]["music"]:
+                        # Parsowanie danych utworu
+                        title = track.get("title", "Nieznany tytuł")
+                        artists = ", ".join([artist.get("name", "Nieznany artysta") for artist in track.get("artists", [])])
+                        album = track.get("album", {}).get("name", "Nieznany album")
+                        release_date = track.get("release_date", "Brak daty")
+                        genres = ", ".join([genre.get("name", "Nieznany gatunek") for genre in track.get("genres", [])])
+                        spotify_url = track.get("external_metadata", {}).get("spotify", {}).get("track", {}).get("id")
+                        album_image = track.get("external_metadata", {}).get("spotify", {}).get("album", {}).get("id")
+                        album_image = f"https://i.scdn.co/image/{album_image}" if album_image else None
+
+                        # Zapis danych
+                        st.session_state['mp3_info'] = {
+                            "title": title,
+                            "track_number": "",
+                            "artist": artists,
+                            "album": album,
+                            "genres": genres,
+                            "release_date": release_date,
+                            "spotify_url": spotify_url,
+                            "album_image": album_image
+                        }
+
+                        if spotify_url:
+                            get_spotify_track(spotify_url)
+                        return True
+                else:
+                    st.warning(f"Nie znaleziono wyników dla fragmentu {attempts + 1}.")
+                    start_time += duration
+                    attempts += 1
+            else:
+                st.error(f"Error {response.status_code}: {response.text}")
+                return False
+
+        st.error("Nie udało się rozpoznać utworu po kilku próbach.")
+        return False
+    
+    except Exception as e:
+        st.error(f"Wystąpił błąd: {e}")
         return False
 
 ###########################################################
