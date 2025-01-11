@@ -213,7 +213,7 @@ def show_page():
  ######proxy
  #    
     if st.session_state.uploaded_mp3 is None:
-        add_mp3, add_record,add_youtube,add_spotify = st.tabs([":musical_note: Załaduj plik", ":microphone: Nagraj mikrofonem", "Dodaj z YouTub'a", "Dodaj z Spotify"])
+        add_mp3, add_record,add_youtube,add_spotify = st.tabs([":musical_note: Załaduj plik", ":microphone: Nagraj mikrofonem", "Dodaj z YouTub'a", "Dodaj ze Spotify"])
 
 ##########
         with add_mp3:

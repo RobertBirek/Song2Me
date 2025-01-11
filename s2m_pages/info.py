@@ -69,7 +69,7 @@ def load_info():
             "title": str(st.session_state["mp3_info"].get("title", "Unknown")),
             "artist": str(st.session_state["mp3_info"].get("artist", "Unknown")),
             "album": str(st.session_state["mp3_info"].get("album", "Unknown")),
-            "track_number": str(st.session_state["mp3_info"].get("track_number", None)),
+            "track_number": str(st.session_state["mp3_info"].get("track_number", "")),
             "release_date": str(st.session_state["mp3_info"].get("release_date", "Unknown")),
             "genres": str(st.session_state["mp3_info"].get("genres", "Unknown")),
             "spotify_url": str(st.session_state["mp3_info"].get("spotify_url", None)),
@@ -181,6 +181,7 @@ def recognize_music(file_path, start_time=30, duration=10):
             # Zapis danych do st.session_state
             st.session_state['mp3_info'] = {
                 "title": title,
+                "track_number": "",
                 "artist": artists,
                 "album": album,
                 "genres": genres,
@@ -254,7 +255,7 @@ def show_page():
     st.title(":musical_note: Song info")
 
     song = ""
-    if st.session_state['mp3_info']['title'] is not "":
+    if st.session_state['mp3_info']['title'] != "":
         song =str(f"{st.session_state['mp3_info']['artist']} - {st.session_state['mp3_info']['title']}")
 
     st.header(f"Inormacje o utworze: {song}")
@@ -264,11 +265,26 @@ def show_page():
 
     c0, c1 = st.columns([6,4]) #([8,2])
     with c0:
-        if st.session_state['mp3_info']['album_image']:
-            st.image(st.session_state['mp3_info']['album_image'])
+        # if st.session_state['mp3_info']['album_image']:
+        #     st.image(st.session_state['mp3_info']['album_image'])
+        # Sprawdź, czy w danych znajduje się ścieżka do obrazu
+        if 'album_image' in st.session_state['mp3_info'] and st.session_state['mp3_info']['album_image']:
+            st.image(st.session_state['mp3_info']['album_image'], caption="Okładka albumu")
+        else:
+            # Jeśli brak ścieżki, pozwól użytkownikowi wgrać obraz z komputera
+            uploaded_image = st.file_uploader("Wgraj obraz dla albumu", type=["jpg", "png", "jpeg"])
+            
+            if uploaded_image:
+                save_path = PATH_UPLOAD / "new.jpg"
+                with open(save_path, "wb") as f:
+                    f.write(uploaded_image.getbuffer())
+                st.write(save_path)
+                st.session_state['mp3_info']['album_image'] = str(save_path)
+                st.rerun()
+                # st.image(save_path, caption="Wgrany obraz dla albumu")
+            else:
+                st.warning("Brak okładki albumu. Wgraj obraz lub podaj ścieżkę.")
         
-        # st.write(st.session_state['mp3_info']['title'])
-
     with c1:
         with st.container(border=False):
             artist = st.text_input("Artysta", value=st.session_state['mp3_info'].get("artist", ""), key="artist")
@@ -283,7 +299,7 @@ def show_page():
             title = st.text_input("Utwór", value=st.session_state['mp3_info'].get("title", ""), key="title")
             if title:
                 st.session_state['mp3_info']['title'] = title
-            track_number = st.text_input("Utwór", value=st.session_state['mp3_info'].get("track_number", ""), key="track_number")
+            track_number = st.text_input("Nr Utworu", value=st.session_state['mp3_info'].get("track_number", ""), key="track_number")
             if track_number:
                 st.session_state['mp3_info']['track_number'] = track_number
 
@@ -309,30 +325,31 @@ def show_page():
             # Zapisz zmiany
             audio.save()
             cover_path = st.session_state['mp3_info']['album_image']
-            if cover_path:
+            save_path = PATH_UPLOAD / "new.jpg"
+            if cover_path != str(save_path):
                 try:
                     response = requests.get(cover_path)
                     response.raise_for_status()  # Sprawdzenie, czy żądanie zakończyło się sukcesem
-                    save_path = PATH_UPLOAD / "new.jpg"
+                    # save_path = PATH_UPLOAD / "new.jpg"
                     with open(save_path, 'wb') as file:
                         file.write(response.content)
                     print(f"Obrazek zapisano jako: {save_path}")
                 except requests.exceptions.RequestException as e:
                     print(f"Błąd podczas pobierania obrazka: {e}")
-
-                # st.image(st.session_state['mp3_info']['album_image'])
-                audio = MP3(path_mp3, ID3=ID3)
-                # Dodaj obrazek jako okładkę albumu
-                audio.tags.add(
-                    APIC(
-                        encoding=3,        # UTF-8
-                        mime="image/jpeg", # Typ MIME obrazka
-                        type=3,            # Okładka przednia (3)
-                        desc="Cover",
-                        data=open(save_path, "rb").read()
-                    )
+            
+            # st.image(st.session_state['mp3_info']['album_image'])
+            audio = MP3(path_mp3, ID3=ID3)
+            # Dodaj obrazek jako okładkę albumu
+            audio.tags.add(
+                APIC(
+                    encoding=3,        # UTF-8
+                    mime="image/jpeg", # Typ MIME obrazka
+                    type=3,            # Okładka przednia (3)
+                    desc="Cover",
+                    data=open(save_path, "rb").read()
                 )
-                audio.save()
+            )
+            audio.save()
  
         # recognize_music(str(path_mp3))
 
